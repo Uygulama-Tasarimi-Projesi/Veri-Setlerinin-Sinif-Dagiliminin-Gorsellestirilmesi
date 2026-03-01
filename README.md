@@ -1,0 +1,1 @@
+# Veri-Setlerinin-S-n-f-Da-l-m-n-n-G-rselle-tirilmesi
