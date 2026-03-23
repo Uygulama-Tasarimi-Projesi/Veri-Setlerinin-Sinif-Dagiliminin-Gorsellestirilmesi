@@ -1,52 +1,56 @@
-import librosa
-import librosa.display
+import os
+import pandas as pd
 import matplotlib.pyplot as plt
-import numpy as np
+import seaborn as sns
 
-# --- AYARLAR ---
-DOSYA_OFKELI = "03-01-05-01-01-01-01.wav"  # 05 = Öfkeli
-DOSYA_UZGUN = "03-01-04-01-01-01-01.wav"   # 04 = Üzgün
+# DOSYA YOLU
+ravdess_path = "C:\\Users\\asus\\Desktop\\3_sinif_bahar\\Uygulama_tasarim\\7.hafta\\archive_ravdess"
 
-# Sesleri Yükle
-y_ofkeli, sr_ofkeli = librosa.load(DOSYA_OFKELI, sr=None)
-y_uzgun, sr_uzgun = librosa.load(DOSYA_UZGUN, sr=None)
+# RAVDESS dosya isimlendirme standartlarına göre duygu kodları
+emotion_dict = {
+    '01': 'Neutral (Nötr)',
+    '02': 'Calm (Sakin)',
+    '03': 'Happy (Mutlu)',
+    '04': 'Sad (Üzgün)',
+    '05': 'Angry (Kızgın)',
+    '06': 'Fearful (Korkulu)',
+    '07': 'Disgust (İğrenme)',
+    '08': 'Surprised (Şaşkın)'
+}
 
-# --- WAVEFORM (ZAMANSAL DALGA) KARŞILAŞTIRMASI ---
-plt.figure(figsize=(14, 4))
+emotions_list = []
 
-plt.subplot(1, 2, 1) # 1 satır, 2 sütun, 1. grafik
-librosa.display.waveshow(y_ofkeli, sr=sr_ofkeli, color="red", alpha=0.7)
-plt.title("Öfkeli (Angry) Ses - Dalga Formu")
-plt.xlabel("Zaman (sn)")
-plt.ylabel("Genlik")
+# KLASÖRLERİ VE DOSYALARI OKUMA
+if not os.path.exists(ravdess_path):
+    print(f"Klasör bulunamadı: {ravdess_path}")
+else:
+    for actor_folder in os.listdir(ravdess_path):
+        actor_path = os.path.join(ravdess_path, actor_folder)
+        
+        # Sadece klasörleri işle
+        if os.path.isdir(actor_path):
+            for file in os.listdir(actor_path):
+                if file.endswith(".wav"):
+                    # Dosya ismini '-' işaretine göre böl ve 3. elemanı (duygu kodunu) al
+                    part = file.split('-')
+                    if len(part) >= 3:
+                        emotion_code = part[2]
+                        # Kodu sözlükten bul, listeye ekle
+                        emotions_list.append(emotion_dict.get(emotion_code, 'Bilinmeyen'))
 
-plt.subplot(1, 2, 2) # 1 satır, 2 sütun, 2. grafik
-librosa.display.waveshow(y_uzgun, sr=sr_uzgun, color="blue", alpha=0.7)
-plt.title("Üzgün (Sad) Ses - Dalga Formu")
-plt.xlabel("Zaman (sn)")
-plt.ylabel("Genlik")
+    # VERİYİ DATAFRAME'E ÇEVİR VE SAY
+    df_audio = pd.DataFrame(emotions_list, columns=['Emotion'])
+    duygu_sayilari = df_audio['Emotion'].value_counts()
 
-plt.tight_layout()
-plt.show()
+    print(f"Toplam İşlenen Ses Dosyası: {len(df_audio)}")
+    print("\n--- SES DUYGU DAĞILIMI ---")
+    print(duygu_sayilari)
 
-# --- MEL-SPECTROGRAM KARŞILAŞTIRMASI ---
-plt.figure(figsize=(14, 4))
-
-# Öfkeli Spektrogram
-plt.subplot(1, 2, 1)
-S_ofkeli = librosa.feature.melspectrogram(y=y_ofkeli, sr=sr_ofkeli, n_mels=128, fmax=8000)
-S_dB_ofkeli = librosa.power_to_db(S_ofkeli, ref=np.max)
-librosa.display.specshow(S_dB_ofkeli, x_axis='time', y_axis='mel', sr=sr_ofkeli, fmax=8000)
-plt.colorbar(format='%+2.0f dB')
-plt.title("Öfkeli Ses - Mel-Spektrogram")
-
-# Üzgün Spektrogram
-plt.subplot(1, 2, 2)
-S_uzgun = librosa.feature.melspectrogram(y=y_uzgun, sr=sr_uzgun, n_mels=128, fmax=8000)
-S_dB_uzgun = librosa.power_to_db(S_uzgun, ref=np.max)
-librosa.display.specshow(S_dB_uzgun, x_axis='time', y_axis='mel', sr=sr_uzgun, fmax=8000)
-plt.colorbar(format='%+2.0f dB')
-plt.title("Üzgün Ses - Mel-Spektrogram")
-
-plt.tight_layout()
-plt.show()
+    # GÖRSELLEŞTİRME (BAR PLOT)
+    plt.figure(figsize=(10,6))
+    sns.barplot(x=duygu_sayilari.values, y=duygu_sayilari.index, palette="viridis")
+    plt.title("RAVDESS Ses Veri Seti Duygu Sınıf Dağılımı")
+    plt.xlabel("Örneklem Sayısı")
+    plt.ylabel("Duygu Sınıfları")
+    plt.tight_layout()
+    plt.show()
