@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 # DOSYA YOLU
-ravdess_path = "C:\\Users\\asus\\Desktop\\3_sinif_bahar\\Uygulama_tasarim\\7.hafta\\archive_ravdess"
+ravdess_path = "archive_ravdess"
 
 # RAVDESS dosya isimlendirme standartlarına göre duygu kodları
 emotion_dict = {
