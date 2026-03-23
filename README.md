@@ -17,7 +17,7 @@ FSMTSAD veri setinden dışarıdan entegre edilen "Nötr" sınıfının, TREMO a
 
 Metin verilerinde sağlanan istatistiksel dengenin ses verilerinde de korunması; geliştirilecek CNN-LSTM tabanlı çok modlu yapay zekâ modelinin akustik özellikleri öğrenirken belirli bir duygu sınıfına yönelik bias geliştirmesini kesin olarak engelleyecek altyapıyı sağlamıştır.
 
-![Ses Veri Seti Duygu Dağılımı](Ses%20Verilerini%20Analiz%20Etme/ses_görüntü.png)
+![Ses Veri Seti Duygu Dağılımı](Ses%20Verilerini%20Analiz%20Etme/Ses%20duygu%20sınıflarının%20dağılım%20çubuk%20grafiği.png)
 *Şekil 3: Ses veri seti duygu sınıf dağılımı çubuk grafiği*
 
 > **💡 Sonuç:** Hem metin hem de ses modalitelerinde elde edilen bu kusursuz sınıf dengesi (class balance), veri sızıntısını önleyen aktör bazlı bölme (actor-based split) stratejisiyle birleşerek; modelin laboratuvar ortamında ezberleme (overfitting) yapmasını engellemiş ve gerçek dünya senaryolarında yüksek genelleme yeteneğine (generalization) sahip olmasını istatistiksel olarak garanti altına almıştır.
