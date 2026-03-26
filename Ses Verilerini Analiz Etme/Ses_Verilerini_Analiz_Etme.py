@@ -3,7 +3,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-# DOSYA YOLU
 ravdess_path = "archive_ravdess"
 
 # RAVDESS dosya isimlendirme standartlarına göre duygu kodları
@@ -20,7 +19,6 @@ emotion_dict = {
 
 emotions_list = []
 
-# KLASÖRLERİ VE DOSYALARI OKUMA
 if not os.path.exists(ravdess_path):
     print(f"Klasör bulunamadı: {ravdess_path}")
 else:
@@ -46,7 +44,7 @@ else:
     print("\n--- SES DUYGU DAĞILIMI ---")
     print(duygu_sayilari)
 
-    # GÖRSELLEŞTİRME (BAR PLOT)
+    # GÖRSELLEŞTİRME
     plt.figure(figsize=(10,6))
     sns.barplot(x=duygu_sayilari.values, y=duygu_sayilari.index, palette="viridis")
     plt.title("RAVDESS Ses Veri Seti Duygu Sınıf Dağılımı")
