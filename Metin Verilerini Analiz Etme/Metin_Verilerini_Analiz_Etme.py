@@ -2,7 +2,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-# VERİYİ YÜKLE 
 df = pd.read_csv("metinVeriSeti.csv")
 
 # FORMAT KONTROLÜ
